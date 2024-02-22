@@ -48,9 +48,9 @@ const passSchema = new mongoose.Schema(
 			required: true,
 		},
 		status: {
-			type: Boolean,
+			type: String,
 			required: true,
-			default: false,
+			default: "Pending",
 		},
 	},
 	{ timestamps: true }

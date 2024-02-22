@@ -45,4 +45,72 @@ const createPass = asyncHandler(async (req, res) => {
 	}
 });
 
-export { getPasses, createPass };
+// Desc Get all passes for a user
+// @route GET /api/passes/mypassess
+// @access Private
+const getMyPasses = asyncHandler(async (req, res) => {
+	const passes = await Pass.find({ user: req.user._id }).sort({
+		createdAt: -1,
+	});
+
+	res.json(passes);
+});
+
+// Desc Get a single pass details
+// @route GET /api/passes/:id
+// @access Private
+const getPassesById = asyncHandler(async (req, res) => {
+	const pass = await Pass.findById(req.params.id);
+
+	if (pass) {
+		res.json(pass);
+	} else {
+		res.status(404);
+		throw new Error("Pass not found!");
+	}
+});
+
+// Desc Update pass request to approve
+// @route PUT /api/passes/:id/approve
+// @access Private/Admin
+const approvePass = asyncHandler(async (req, res) => {
+	const pass = await Pass.findById(req.params.id);
+
+	if (pass) {
+		pass.status = "Approved";
+
+		const approvedPass = await pass.save();
+
+		res.json(approvedPass);
+	} else {
+		res.status(404);
+		throw new Error("Pass not found!");
+	}
+});
+
+// Desc Update pass request to reject
+// @route PUT /api/passes/:id/reject
+// @access Private/Admin
+const rejectPass = asyncHandler(async (req, res) => {
+	const pass = await Pass.findById(req.params.id);
+
+	if (pass) {
+		pass.status = "Rejected";
+
+		const rejectPass = await pass.save();
+
+		res.json(rejectPass);
+	} else {
+		res.status(404);
+		throw new Error("Pass not found!");
+	}
+});
+
+export {
+	getPasses,
+	createPass,
+	getMyPasses,
+	getPassesById,
+	approvePass,
+	rejectPass,
+};
