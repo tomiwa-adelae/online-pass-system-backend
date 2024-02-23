@@ -21,6 +21,7 @@ const createPass = asyncHandler(async (req, res) => {
 		departureDate,
 		locationOfDeparture,
 		reason,
+		hostel,
 	} = req.body;
 
 	const pass = await Pass.create({
@@ -35,6 +36,7 @@ const createPass = asyncHandler(async (req, res) => {
 		departureDate,
 		locationOfDeparture,
 		reason,
+		hostel,
 	});
 
 	if (pass) {
@@ -46,7 +48,7 @@ const createPass = asyncHandler(async (req, res) => {
 });
 
 // Desc Get all passes for a user
-// @route GET /api/passes/mypassess
+// @route GET /api/passes/mine
 // @access Private
 const getMyPasses = asyncHandler(async (req, res) => {
 	const passes = await Pass.find({ user: req.user._id }).sort({
