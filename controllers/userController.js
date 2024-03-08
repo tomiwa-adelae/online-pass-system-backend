@@ -21,6 +21,8 @@ const authUser = asyncHandler(async (req, res) => {
 			faculty: user.faculty,
 			profilePicture: user.profilePicture,
 			phoneNumber: user.phoneNumber,
+			address: user.address,
+			parentPhoneNumber: user.parentPhoneNumber,
 			isAdmin: user.isAdmin,
 		});
 	} else {
@@ -91,6 +93,8 @@ const registerUser = asyncHandler(async (req, res) => {
 			faculty: user.faculty,
 			profilePicture: user.profilePicture,
 			phoneNumber: user.phoneNumber,
+			address: user.address,
+			parentPhoneNumber: user.parentPhoneNumber,
 			isAdmin: user.isAdmin,
 		});
 	} else {
@@ -107,4 +111,41 @@ const getUsers = asyncHandler(async (req, res) => {
 	res.json(users);
 });
 
-export { authUser, registerUser, getUsers };
+// Desc Update user profile
+// @route PUT /api/users/profile
+// @access Private
+const updateUser = asyncHandler(async (req, res) => {
+	const user = await User.findById(req.user._id);
+
+	if (user) {
+		user.name = req.body.name || user.name;
+		user.email = req.body.email || user.email;
+		user.matricNumber = req.body.matricNumber || user.matricNumber;
+		user.department = req.body.department || user.department;
+		user.faculty = req.body.faculty || user.faculty;
+		user.address = req.body.address || user.address;
+		user.parentPhoneNumber =
+			req.body.parentPhoneNumber || user.parentPhoneNumber;
+
+		const updatedUser = await user.save();
+
+		res.json({
+			_id: updatedUser._id,
+			name: updatedUser.name,
+			email: updatedUser.email,
+			matricNumber: updatedUser.matricNumber,
+			department: updatedUser.department,
+			faculty: updatedUser.faculty,
+			profilePicture: updatedUser.profilePicture,
+			phoneNumber: updatedUser.phoneNumber,
+			address: updatedUser.address,
+			parentPhoneNumber: updatedUser.parentPhoneNumber,
+			isAdmin: updatedUser.isAdmin,
+		});
+	} else {
+		res.status(401);
+		throw new Error("An error occured! User not found!");
+	}
+});
+
+export { authUser, registerUser, getUsers, updateUser };

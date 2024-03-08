@@ -37,6 +37,12 @@ const userSchema = new mongoose.Schema(
 		phoneNumber: {
 			type: String,
 		},
+		parentPhoneNumber: {
+			type: String,
+		},
+		address: {
+			type: String,
+		},
 		isAdmin: {
 			type: Boolean,
 			required: true,
