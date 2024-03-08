@@ -19,10 +19,23 @@ const createPass = asyncHandler(async (req, res) => {
 		phoneNumber,
 		parentPhoneNumber,
 		departureDate,
-		locationOfDeparture,
+		location,
 		reason,
 		hostel,
 	} = req.body;
+
+
+	if (
+		!departureDate ||
+		!location ||
+		!phoneNumber ||
+		!parentPhoneNumber ||
+		!reason ||
+		!hostel
+	) {
+		res.status(400);
+		throw new Error("Please enter all fields!");
+	}
 
 	const pass = await Pass.create({
 		user: _id,
@@ -34,7 +47,7 @@ const createPass = asyncHandler(async (req, res) => {
 		phoneNumber,
 		parentPhoneNumber,
 		departureDate,
-		locationOfDeparture,
+		location,
 		reason,
 		hostel,
 	});

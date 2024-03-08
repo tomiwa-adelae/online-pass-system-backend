@@ -39,7 +39,7 @@ const passSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		locationOfDeparture: {
+		location: {
 			type: String,
 			required: true,
 		},

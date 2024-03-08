@@ -36,6 +36,35 @@ const registerUser = asyncHandler(async (req, res) => {
 	const { name, email, matricNumber, department, faculty, password } =
 		req.body;
 
+	if (
+		!name ||
+		!email ||
+		!matricNumber ||
+		!department ||
+		!faculty ||
+		!password
+	) {
+		res.status(400);
+		throw new Error("Please enter all fields!");
+	}
+
+	if (matricNumber.length !== 8 && matricNumber.length !== 11) {
+		res.status(400);
+		throw new Error("Invalid matriculation/admission number!");
+	}
+
+	if (password.length <= 5) {
+		res.status(400);
+		throw new Error("Password should be at least 6 character!");
+	}
+
+	const matricNumberExist = await User.findOne({ matricNumber });
+
+	if (matricNumberExist) {
+		res.status(400);
+		throw new Error("Matriculation/Admission already exist! Please login");
+	}
+
 	const userExist = await User.findOne({ email });
 	if (userExist) {
 		res.status(400);
