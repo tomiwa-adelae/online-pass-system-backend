@@ -148,4 +148,63 @@ const updateUser = asyncHandler(async (req, res) => {
 	}
 });
 
-export { authUser, registerUser, getUsers, updateUser };
+// Desc Update user password
+// @route PUT /api/users/password
+// @access Private
+const updatePassword = asyncHandler(async (req, res) => {
+	const user = await User.findById(req.user._id);
+
+	const { currentPassword, newPassword, confirmPassword } = req.body;
+
+	if (user) {
+		if (!currentPassword || !newPassword || !confirmPassword) {
+			res.status(401);
+			throw new Error("Please enter all fields!");
+		}
+
+		if (newPassword !== confirmPassword) {
+			res.status(401);
+			throw new Error("Passwords do not match!");
+		}
+
+		if (newPassword.length <= 5) {
+			res.status(400);
+			throw new Error("Passwords should be at least 6 character!");
+		}
+
+		if (user && (await user.matchPassword(currentPassword))) {
+			user.password = newPassword;
+
+			await user.save();
+
+			res.status(201).json({ message: "Password successfully updated!" });
+		} else {
+			res.status(401);
+			throw new Error("Invalid current password!");
+		}
+	} else {
+		res.status(404);
+		throw new Error("An error occured! User not found!");
+	}
+});
+
+// Desc Update user password
+// @route PUT /api/users/password
+// @access Private
+const logoutUser = (req, res) => {
+	res.cookie("jwt", "", {
+		httpOnly: true,
+		expires: new Date(0),
+	});
+
+	res.status(200).json({ message: "Logged out successfully!" });
+};
+
+export {
+	authUser,
+	registerUser,
+	getUsers,
+	updateUser,
+	updatePassword,
+	logoutUser,
+};
