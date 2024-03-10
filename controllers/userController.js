@@ -111,6 +111,20 @@ const getUsers = asyncHandler(async (req, res) => {
 	res.json(users);
 });
 
+// Desc Get user details as an admin
+// @route GET /api/users/:id
+// @access Private/admin
+const getUser = asyncHandler(async (req, res) => {
+	const user = await User.findById(req.params.id).select("-password");
+
+	if (user) {
+		res.json(user);
+	} else {
+		res.status(401);
+		throw new Error("An error occured! User not found!");
+	}
+});
+
 // Desc Update user profile
 // @route PUT /api/users/profile
 // @access Private
@@ -204,6 +218,7 @@ export {
 	authUser,
 	registerUser,
 	getUsers,
+	getUser,
 	updateUser,
 	updatePassword,
 	logoutUser,

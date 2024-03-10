@@ -10,6 +10,17 @@ const getPasses = asyncHandler(async (req, res) => {
 	res.json(passes);
 });
 
+// Desc Get all user passes as an admin
+// @route GET /api/passes/admin/userpasses/:id
+// @access Private/Admin
+const getUserPasses = asyncHandler(async (req, res) => {
+	const passes = await Pass.find({ user: req.params.id }).sort({
+		createdAt: -1,
+	});
+
+	res.json(passes);
+});
+
 // Desc Create a pass request
 // @route POST /api/passes
 // @access Private
@@ -23,7 +34,6 @@ const createPass = asyncHandler(async (req, res) => {
 		reason,
 		hostel,
 	} = req.body;
-
 
 	if (
 		!departureDate ||
@@ -121,6 +131,39 @@ const rejectPass = asyncHandler(async (req, res) => {
 	}
 });
 
+// Desc Get approved passes as an admin
+// @route GET /api/passes/approvedPasses
+// @access Private/Admin
+const getApprovedPasses = asyncHandler(async (req, res) => {
+	const passes = await Pass.find({ status: "Approved" }).sort({
+		createdAt: -1,
+	});
+
+	res.send(passes);
+});
+
+// Desc Get rejected passes as an admin
+// @route GET /api/passes/rejectedPasses
+// @access Private/Admin
+const getRejectedPasses = asyncHandler(async (req, res) => {
+	const passes = await Pass.find({ status: "Rejected" }).sort({
+		createdAt: -1,
+	});
+
+	res.send(passes);
+});
+
+// Desc Get pending passes as an admin
+// @route GET /api/passes/pendingPasses
+// @access Private/Admin
+const getPendingPasses = asyncHandler(async (req, res) => {
+	const passes = await Pass.find({ status: "Pending" }).sort({
+		createdAt: -1,
+	});
+
+	res.send(passes);
+});
+
 export {
 	getPasses,
 	createPass,
@@ -128,4 +171,8 @@ export {
 	getPassesById,
 	approvePass,
 	rejectPass,
+	getApprovedPasses,
+	getRejectedPasses,
+	getPendingPasses,
+	getUserPasses,
 };
