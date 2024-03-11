@@ -5,7 +5,68 @@ import Pass from "../models/passModel.js";
 // @route GET /api/passes
 // @access Private/Admin
 const getPasses = asyncHandler(async (req, res) => {
-	const passes = await Pass.find({}).sort({ createdAt: -1 });
+	const keyword = req.query.keyword
+		? {
+				$or: [
+					{
+						name: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						email: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						matricNumber: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						department: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						faculty: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						location: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						hostel: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						reason: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						status: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+				],
+		  }
+		: {};
+
+	const passes = await Pass.find({ ...keyword }).sort({ createdAt: -1 });
 
 	res.json(passes);
 });
@@ -74,7 +135,68 @@ const createPass = asyncHandler(async (req, res) => {
 // @route GET /api/passes/mine
 // @access Private
 const getMyPasses = asyncHandler(async (req, res) => {
-	const passes = await Pass.find({ user: req.user._id }).sort({
+	const keyword = req.query.keyword
+		? {
+				$or: [
+					{
+						name: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						email: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						matricNumber: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						department: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						faculty: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						location: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						hostel: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						reason: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						status: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+				],
+		  }
+		: {};
+
+	const passes = await Pass.find({ ...keyword, user: req.user._id }).sort({
 		createdAt: -1,
 	});
 
@@ -135,7 +257,68 @@ const rejectPass = asyncHandler(async (req, res) => {
 // @route GET /api/passes/approvedPasses
 // @access Private/Admin
 const getApprovedPasses = asyncHandler(async (req, res) => {
-	const passes = await Pass.find({ status: "Approved" }).sort({
+	const keyword = req.query.keyword
+		? {
+				$or: [
+					{
+						name: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						email: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						matricNumber: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						department: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						faculty: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						location: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						hostel: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						reason: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						status: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+				],
+		  }
+		: {};
+
+	const passes = await Pass.find({ ...keyword, status: "Approved" }).sort({
 		createdAt: -1,
 	});
 
@@ -146,7 +329,67 @@ const getApprovedPasses = asyncHandler(async (req, res) => {
 // @route GET /api/passes/rejectedPasses
 // @access Private/Admin
 const getRejectedPasses = asyncHandler(async (req, res) => {
-	const passes = await Pass.find({ status: "Rejected" }).sort({
+	const keyword = req.query.keyword
+		? {
+				$or: [
+					{
+						name: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						email: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						matricNumber: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						department: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						faculty: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						location: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						hostel: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						reason: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						status: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+				],
+		  }
+		: {};
+	const passes = await Pass.find({ ...keyword, status: "Rejected" }).sort({
 		createdAt: -1,
 	});
 
@@ -157,7 +400,68 @@ const getRejectedPasses = asyncHandler(async (req, res) => {
 // @route GET /api/passes/pendingPasses
 // @access Private/Admin
 const getPendingPasses = asyncHandler(async (req, res) => {
-	const passes = await Pass.find({ status: "Pending" }).sort({
+	const keyword = req.query.keyword
+		? {
+				$or: [
+					{
+						name: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						email: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						matricNumber: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						department: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						faculty: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						location: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						hostel: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						reason: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						status: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+				],
+		  }
+		: {};
+
+	const passes = await Pass.find({ ...keyword, status: "Pending" }).sort({
 		createdAt: -1,
 	});
 

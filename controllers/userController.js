@@ -107,7 +107,68 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route GET /api/users
 // @access Private/admin
 const getUsers = asyncHandler(async (req, res) => {
-	const users = await User.find({}).sort({ createdAt: -1 });
+	const keyword = req.query.keyword
+		? {
+				$or: [
+					{
+						name: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						email: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						matricNumber: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						department: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						faculty: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						location: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						hostel: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						reason: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+					{
+						status: {
+							$regex: req.query.keyword,
+							$options: "i",
+						},
+					},
+				],
+		  }
+		: {};
+
+	const users = await User.find({ ...keyword }).sort({ createdAt: -1 });
 	res.json(users);
 });
 
