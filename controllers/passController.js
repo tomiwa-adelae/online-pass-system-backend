@@ -1,5 +1,14 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+import Mailjet from "node-mailjet";
 import asyncHandler from "express-async-handler";
 import Pass from "../models/passModel.js";
+
+const mailjet = Mailjet.apiConnect(
+	process.env.MAILJET_API_PUBLIC_KEY,
+	process.env.MAILJET_API_PRIVATE_KEY
+);
 
 // Desc Get all passes as an admin
 // @route GET /api/passes
@@ -124,6 +133,51 @@ const createPass = asyncHandler(async (req, res) => {
 	});
 
 	if (pass) {
+		const request = mailjet.post("send", { version: "v3.1" }).request({
+			Messages: [
+				{
+					From: {
+						Email: "thetommedia@gmail.com",
+						Name: "Passify",
+					},
+					To: [
+						{
+							Email: `${req.user.email}`,
+							Name: `${req.user.name}`,
+						},
+					],
+					Subject: `Successful Exeat Pass Application - Pending`,
+					TextPart: `Your exeat request is pending at the moment.`,
+					HTMLPart: `<div 
+									style="padding: 2rem;"
+								>
+									<img src='https://res.cloudinary.com/the-tom-media/image/upload/v1710179742/Passify/logo-primary_qx2hbo.png' />
+
+									<p>Dear ${req.user.name},</p>
+
+									<p>We hope this email finds you well. We am writing to inform you that your exeat pass application has been successfully submitted, although it is currently <strong>pending</strong> approval.</p>
+
+									<p>In the meantime, if you have any questions or concerns regarding your exeat pass application or any other matter, please do not hesitate to reach out to us. We are here to assist you in any way we can.</p>
+
+									<p>Thank you for your patience and understanding.</p>
+									<p>Best regards,</p>
+									<p>&copy; 2024 Passify. All Rights Reserved</p>
+								</div>
+						`,
+				},
+			],
+		});
+
+		// Send email
+		request
+			.then(() => {
+				res.status(201).json({ msg: "Email sent successfully!" });
+				return;
+			})
+			.catch((err) => {
+				return err;
+			});
+
 		res.status(201).json(pass);
 	} else {
 		res.status(401);
@@ -228,6 +282,55 @@ const approvePass = asyncHandler(async (req, res) => {
 
 		const approvedPass = await pass.save();
 
+		const request = mailjet.post("send", { version: "v3.1" }).request({
+			Messages: [
+				{
+					From: {
+						Email: "thetommedia@gmail.com",
+						Name: "Passify",
+					},
+					To: [
+						{
+							Email: `${pass.email}`,
+							Name: `${pass.name}`,
+						},
+					],
+					Subject: `Approved Exeat Pass Application`,
+					TextPart: `Your exeat request has been approved!`,
+					HTMLPart: `<div 
+									style="padding: 2rem;"
+								>
+									<img src='https://res.cloudinary.com/the-tom-media/image/upload/v1710179742/Passify/logo-primary_qx2hbo.png' />
+
+									<p>Dear ${pass.name},</p>
+
+									<p>I am pleased to inform you that your exeat pass application has been successfully <strong>approved</strong>. You are now authorized to proceed with your planned absence as per the details provided in your application.</p>
+
+									<p>Your approved exeat pass will be available for collection on the website.</p>
+
+									<p>We appreciate your cooperation throughout the application process and hope that your absence proves to be both productive and rejuvenating.</p>
+
+									<p>Should you have any questions or require further assistance, please feel free to contact us.</p>
+
+									<p>Thank you for your patience and understanding.</p>
+									<p>Best regards,</p>
+									<p>&copy; 2024 Passify. All Rights Reserved</p>
+								</div>
+						`,
+				},
+			],
+		});
+
+		// Send email
+		request
+			.then(() => {
+				res.status(201).json({ msg: "Email sent successfully!" });
+				return;
+			})
+			.catch((err) => {
+				return err;
+			});
+
 		res.json(approvedPass);
 	} else {
 		res.status(404);
@@ -245,6 +348,53 @@ const rejectPass = asyncHandler(async (req, res) => {
 		pass.status = "Rejected";
 
 		const rejectPass = await pass.save();
+
+		const request = mailjet.post("send", { version: "v3.1" }).request({
+			Messages: [
+				{
+					From: {
+						Email: "thetommedia@gmail.com",
+						Name: "Passify",
+					},
+					To: [
+						{
+							Email: `${pass.email}`,
+							Name: `${pass.name}`,
+						},
+					],
+					Subject: `Rejected Exeat Pass Application`,
+					TextPart: `Your exeat request has been rejected!`,
+					HTMLPart: `<div 
+									style="padding: 2rem;"
+								>
+									<img src='https://res.cloudinary.com/the-tom-media/image/upload/v1710179742/Passify/logo-primary_qx2hbo.png' />
+
+									<p>Dear ${pass.name},</p>
+
+									<p>I regret to inform you that your exeat pass application has been <strong>rejected</strong>. After careful consideration, we have determined that the reasons provided for your absence do not meet the criteria for approval.</p>
+
+									<p>We understand that this decision may cause inconvenience, and we apologize for any disruption it may cause to your plans. If you wish to discuss the reasons for the rejection or require further clarification, please do not hesitate to contact us.</p>
+
+									<p>We appreciate your understanding in this matter and hope for your cooperation in adhering to the necessary protocols and procedures for future applications.</p>
+
+									<p>Thank you for your patience and understanding.</p>
+									<p>Best regards,</p>
+									<p>&copy; 2024 Passify. All Rights Reserved</p>
+								</div>
+						`,
+				},
+			],
+		});
+
+		// Send email
+		request
+			.then(() => {
+				res.status(201).json({ msg: "Email sent successfully!" });
+				return;
+			})
+			.catch((err) => {
+				return err;
+			});
 
 		res.json(rejectPass);
 	} else {
