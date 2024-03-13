@@ -117,6 +117,16 @@ const createPass = asyncHandler(async (req, res) => {
 		throw new Error("Please enter all fields!");
 	}
 
+	if (phoneNumber.length !== 11) {
+		res.status(400);
+		throw new Error("Invalid phone number!");
+	}
+
+	if (parentPhoneNumber.length !== 11) {
+		res.status(400);
+		throw new Error("Invalid parent phone number!");
+	}
+
 	const pass = await Pass.create({
 		user: _id,
 		name,
