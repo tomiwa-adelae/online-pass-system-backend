@@ -60,7 +60,7 @@ const registerUser = asyncHandler(async (req, res) => {
 		throw new Error("Please enter all fields!");
 	}
 
-	if (matricNumber.length !== 8 && matricNumber.length !== 11) {
+	if (matricNumber.length < 8 && matricNumber.length > 12) {
 		res.status(400);
 		throw new Error("Invalid matriculation/admission number!");
 	}
