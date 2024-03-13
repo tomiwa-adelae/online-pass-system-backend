@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 app.use(
 	cors({
 		credentials: true,
-		// origin: "https://passify-eight.vercel.app/"
+		origin: "https://passify-eight.vercel.app",
 	})
 );
 
