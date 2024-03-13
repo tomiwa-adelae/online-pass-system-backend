@@ -18,7 +18,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Making cross origin request possible
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+// app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(
+	cors({ credentials: true, origin: "https://passify-eight.vercel.app/" })
+);
 
 // Allowing cookies
 app.use(cookieParser());
