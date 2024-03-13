@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
 	res.setHeader(
 		"Access-Control-Allow-Origin",
-		"https://passify-eight.vercel.app/"
+		"https://passify-eight.vercel.app"
 	);
 	res.setHeader("Access-Control-Allow-Methods", "*");
 	res.setHeader("Access-Control-Allow-Headers", "*");
