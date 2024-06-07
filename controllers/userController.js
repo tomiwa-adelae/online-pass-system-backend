@@ -211,6 +211,7 @@ const updateUser = asyncHandler(async (req, res) => {
 		user.address = req.body.address || user.address;
 		user.parentPhoneNumber =
 			req.body.parentPhoneNumber || user.parentPhoneNumber;
+		user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
 
 		const updatedUser = await user.save();
 
