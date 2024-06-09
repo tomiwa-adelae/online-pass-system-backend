@@ -20,7 +20,7 @@ const authUser = asyncHandler(async (req, res) => {
 
 	const user = await User.findOne({ email });
 	if (user && (await user.matchPassword(password))) {
-		generateToken(res, user._id);
+		const token = generateToken(res, user._id);
 
 		res.json({
 			_id: user._id,
@@ -34,6 +34,7 @@ const authUser = asyncHandler(async (req, res) => {
 			address: user.address,
 			parentPhoneNumber: user.parentPhoneNumber,
 			isAdmin: user.isAdmin,
+			token,
 		});
 	} else {
 		res.status(401);
@@ -92,9 +93,9 @@ const registerUser = asyncHandler(async (req, res) => {
 		password,
 	});
 	if (user) {
-		generateToken(res, user._id);
+		const token = generateToken(res, user._id);
 
-		res.status(201).json({
+		res.json({
 			_id: user._id,
 			name: user.name,
 			email: user.email,
@@ -106,6 +107,7 @@ const registerUser = asyncHandler(async (req, res) => {
 			address: user.address,
 			parentPhoneNumber: user.parentPhoneNumber,
 			isAdmin: user.isAdmin,
+			token,
 		});
 	} else {
 		res.status(401);
@@ -215,6 +217,8 @@ const updateUser = asyncHandler(async (req, res) => {
 
 		const updatedUser = await user.save();
 
+		const token = generateToken(res, user._id);
+
 		res.json({
 			_id: updatedUser._id,
 			name: updatedUser.name,
@@ -227,6 +231,7 @@ const updateUser = asyncHandler(async (req, res) => {
 			address: updatedUser.address,
 			parentPhoneNumber: updatedUser.parentPhoneNumber,
 			isAdmin: updatedUser.isAdmin,
+			token,
 		});
 	} else {
 		res.status(401);
